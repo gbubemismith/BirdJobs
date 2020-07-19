@@ -1,9 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using BirdJobs.API.Data;
+using BirdJobs.API.Helpers;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -25,7 +30,22 @@ namespace BirdJobs.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(opt => {
+
+                opt.SerializerSettings.ReferenceLoopHandling = 
+                Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            });
+
+             services.AddCors();
+             services.Configure<TwitterSettings>(Configuration.GetSection("TwitterSettings"));
+             services.AddHttpClient("twitter");
+             services.AddScoped<ITwitterAuthRepository, TwitterAuthRepository>();
+             
+            //  services.AddAuthentication().AddTwitter(twitterOptions => {
+            //      twitterOptions.ConsumerKey = Configuration.GetSection("AppSettings:Twitter_AppId").Value;
+            //      twitterOptions.ConsumerSecret = Configuration.GetSection("AppSettings:Twitter_AppSecret").Value;
+            //      twitterOptions.RetrieveUserDetails = true;
+            //  });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -35,8 +55,24 @@ namespace BirdJobs.API
             {
                 app.UseDeveloperExceptionPage();
             }
+            else {
+                app.UseExceptionHandler(builder => {
+                    builder.Run(async context => {
+                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-            app.UseHttpsRedirection();
+                        var error = context.Features.Get<IExceptionHandlerFeature>();
+                        if (error != null) {
+
+                            context.Response.AddApplicationError(error.Error.Message);
+                            await context.Response.WriteAsync(error.Error.Message);
+                        } 
+
+                    }); 
+                });
+            }
+
+            // app.UseHttpsRedirection();
+            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             app.UseRouting();
 
