@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -36,10 +37,13 @@ namespace BirdJobs.API
                 Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             });
 
-             services.AddCors();
-             services.Configure<TwitterSettings>(Configuration.GetSection("TwitterSettings"));
-             services.AddHttpClient("twitter");
-             services.AddScoped<ITwitterAuthRepository, TwitterAuthRepository>();
+            services.AddDbContext<DataContext>(x => 
+                                x.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddCors();
+            services.Configure<TwitterSettings>(Configuration.GetSection("TwitterSettings"));
+            services.AddHttpClient("twitter");
+            services.AddScoped<ITwitterAuthRepository, TwitterAuthRepository>();
              
             //  services.AddAuthentication().AddTwitter(twitterOptions => {
             //      twitterOptions.ConsumerKey = Configuration.GetSection("AppSettings:Twitter_AppId").Value;

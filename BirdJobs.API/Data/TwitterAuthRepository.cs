@@ -18,9 +18,11 @@ namespace BirdJobs.API.Data
         private readonly IConfiguration _config;
         private readonly IHttpClientFactory _clientFactory;
         private readonly IOptions<TwitterSettings> _twitterConfig;
+        private readonly DataContext _context;
 
-        public TwitterAuthRepository(IConfiguration config, IHttpClientFactory clientFactory, IOptions<TwitterSettings> twitterConfig)
+        public TwitterAuthRepository(IConfiguration config, IHttpClientFactory clientFactory, IOptions<TwitterSettings> twitterConfig, DataContext context)
         {
+            _context = context;
             _twitterConfig = twitterConfig;
             _clientFactory = clientFactory;
             _config = config;
@@ -99,6 +101,8 @@ namespace BirdJobs.API.Data
             var consumerKey = _twitterConfig.Value.AppId;
             var consumerSecret = _twitterConfig.Value.AppSecret;
 
+            var accessTokenResponse = new AccessTokenResponse();
+
             client.DefaultRequestHeaders.Accept.Clear();
 
             var oauthClient = new OAuthRequest
@@ -118,11 +122,7 @@ namespace BirdJobs.API.Data
 
             client.DefaultRequestHeaders.Add("Authorization", auth);
 
-            var data = new
-            {
-                oauth_verifier = oauthVerifier
-            };
-
+           
             try
             {
                 var content = new FormUrlEncodedContent(new[]{
@@ -135,6 +135,15 @@ namespace BirdJobs.API.Data
 
                     var responseString = response.Content.ReadAsStringAsync()
                                                .Result.Split("&");
+
+                    accessTokenResponse = new AccessTokenResponse 
+                    {
+                        oauth_token = responseString[0].Split("=")[1],
+                        oauth_token_secret = responseString[1].Split("=")[1],
+                        user_id = responseString[2].Split("=")[1],
+                        screen_name = responseString[3].Split("=")[1]
+                    };
+                    
                 }
             }
             catch (Exception ex)
@@ -142,6 +151,21 @@ namespace BirdJobs.API.Data
 
                 throw;
             }
+        }
+
+        public void Add<T>(T entity) where T : class
+        {
+            _context.Add(entity);
+        }
+
+        public void Delete<T>(T entity) where T : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<bool> SaveAll()
+        {
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }
