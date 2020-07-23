@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using AutoMapper;
 using BirdJobs.API.Data;
 using BirdJobs.API.Helpers;
 using Microsoft.AspNetCore.Builder;
@@ -41,6 +42,7 @@ namespace BirdJobs.API
                                 x.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddCors();
+            services.AddAutoMapper(typeof(Startup));
             services.Configure<TwitterSettings>(Configuration.GetSection("TwitterSettings"));
             services.AddHttpClient("twitter");
             services.AddScoped<ITwitterAuthRepository, TwitterAuthRepository>();

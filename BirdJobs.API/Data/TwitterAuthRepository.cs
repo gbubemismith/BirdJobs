@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using BirdJobs.API.Dtos;
 using BirdJobs.API.Helpers;
 using BirdJobs.API.Models;
 using Microsoft.Extensions.Configuration;
@@ -39,7 +40,8 @@ namespace BirdJobs.API.Data
             var client = _clientFactory.CreateClient("twitter");
             var consumerKey = _twitterConfig.Value.AppId;
             var consumerSecret = _twitterConfig.Value.AppSecret;
-            var callbackUrl = "http://localhost:5000/api/twitterclient/sign-in-with-twitter";
+            // var callbackUrl = "http://localhost:5000/api/twitterclient/sign-in-with-twitter";
+            var callbackUrl = "http://localhost:4200";
 
             client.DefaultRequestHeaders.Accept.Clear();
 
@@ -95,13 +97,13 @@ namespace BirdJobs.API.Data
 
         }
 
-        public async Task GetAccessToken(string token, string oauthVerifier)
+        public async Task<UserModelDto> GetAccessToken(string token, string oauthVerifier)
         {
             var client = _clientFactory.CreateClient("twitter");
             var consumerKey = _twitterConfig.Value.AppId;
             var consumerSecret = _twitterConfig.Value.AppSecret;
 
-            var accessTokenResponse = new AccessTokenResponse();
+            var accessTokenResponse = new UserModelDto();
 
             client.DefaultRequestHeaders.Accept.Clear();
 
@@ -133,15 +135,17 @@ namespace BirdJobs.API.Data
                 {
                     response.EnsureSuccessStatusCode();
 
+                    //twiiter responds with a string concatenated by &
                     var responseString = response.Content.ReadAsStringAsync()
                                                .Result.Split("&");
 
-                    accessTokenResponse = new AccessTokenResponse 
+                    //split by = to get acual values
+                    accessTokenResponse = new UserModelDto 
                     {
-                        oauth_token = responseString[0].Split("=")[1],
-                        oauth_token_secret = responseString[1].Split("=")[1],
-                        user_id = responseString[2].Split("=")[1],
-                        screen_name = responseString[3].Split("=")[1]
+                        Token = responseString[0].Split("=")[1],
+                        TokenSecret = responseString[1].Split("=")[1],
+                        UserId = responseString[2].Split("=")[1],
+                        Username = responseString[3].Split("=")[1]
                     };
                     
                 }
@@ -149,8 +153,55 @@ namespace BirdJobs.API.Data
             catch (Exception ex)
             {
 
+                
+            }
+
+            return accessTokenResponse;
+        }
+
+        public async Task VerifyCredentials(string token, string tokenSecret)
+        {
+            var client = _clientFactory.CreateClient("twitter");
+            var consumerKey = _twitterConfig.Value.AppId;
+            var consumerSecret = _twitterConfig.Value.AppSecret;
+
+            client.DefaultRequestHeaders.Accept.Clear();
+
+            // var userDetails = new List<TwitterUserDetails>();
+
+            var oauthClient = new OAuthRequest 
+            {
+                Method = "GET",
+                SignatureMethod = OAuthSignatureMethod.HmacSha1,
+                ConsumerKey = consumerKey,
+                ConsumerSecret = consumerSecret,
+                Token = token,
+                TokenSecret = tokenSecret,
+                RequestUrl = "https://api.twitter.com/1.1/account/verify_credentials.json",
+                Version = "1.0a",
+                Realm = "twitter.com"
+            };
+
+            string auth = oauthClient.GetAuthorizationHeader();
+
+            client.DefaultRequestHeaders.Add("Authorization", auth);
+
+            try
+            {
+                using (var response = await client.GetAsync(oauthClient.RequestUrl))
+                {
+                    response.EnsureSuccessStatusCode();
+
+                    var userDetails = JsonConvert.DeserializeObject<TwitterUserDetails>(response.Content.     ReadAsStringAsync().Result);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                
                 throw;
             }
+
         }
 
         public void Add<T>(T entity) where T : class
@@ -167,5 +218,7 @@ namespace BirdJobs.API.Data
         {
             return await _context.SaveChangesAsync() > 0;
         }
+
+       
     }
 }
