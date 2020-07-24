@@ -8,9 +8,11 @@
         </div>
     
         <div class="text-center social-btn">
-            <a class="btn btn-info btn-block" (click)="launchTwitterLogin()"><i class="fa fa-twitter"></i> Sign in with <b>Twitter</b></a>
+            <button class="btn btn-info btn-block" (click)="launchTwitterLogin()" 
+            type="button" [disabled]="disableButton"><i class="fa fa-twitter"></i> Sign in with <b>Twitter</b></button>
+           
         </div>
-        <!-- https://api.twitter.com/oauth/authenticate?oauth_token=rViHLQAAAAAAv-EGAAABc2KRxY0&oauth_callback=https%3A%2F%2Fusers.premierleague.com%2Faccounts%2Ftwitter%2Flogin%2Fcallback%2F -->
+        
       </form>
   <!-- </div> -->
 </div>

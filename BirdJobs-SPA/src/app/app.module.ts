@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ErrorInterceptorProvider } from './services/error.interceptor';
 import { HttpClientModule } from '@angular/common/http';
+import { JwtModule } from '@auth0/angular-jwt';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -12,6 +13,10 @@ import { HomeComponent } from './home/home.component';
 import { TwitterAuthService } from './services/twitter-auth.service';
 
 
+
+export function tokenGetter() {
+  return localStorage.getItem('token');
+}
 
 @NgModule({
   declarations: [
@@ -23,7 +28,15 @@ import { TwitterAuthService } from './services/twitter-auth.service';
   imports: [
     BrowserModule,
     RouterModule.forRoot(appRoutes),
-    HttpClientModule
+    HttpClientModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+        allowedDomains: ['localhost:5000'],
+        disallowedRoutes: ['localhost:5000/api/twitterclient']
+      }
+    })
+    
   ],
   providers: [
     ErrorInterceptorProvider,
