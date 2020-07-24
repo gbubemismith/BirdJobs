@@ -30,7 +30,7 @@ namespace BirdJobs.API.Data
 
         }
 
-
+        //Get Request Token
         public async Task<RequestTokenResponse> GetRequestToken()
         {
 
@@ -97,6 +97,7 @@ namespace BirdJobs.API.Data
 
         }
 
+        //Get Access Token
         public async Task<UserModelDto> GetAccessToken(string token, string oauthVerifier)
         {
             var client = _clientFactory.CreateClient("twitter");
@@ -159,7 +160,8 @@ namespace BirdJobs.API.Data
             return accessTokenResponse;
         }
 
-        public async Task VerifyCredentials(string token, string tokenSecret)
+        //Get User Details
+        public async Task<TwitterUserDetails> VerifyCredentials(string token, string tokenSecret)
         {
             var client = _clientFactory.CreateClient("twitter");
             var consumerKey = _twitterConfig.Value.AppId;
@@ -167,7 +169,7 @@ namespace BirdJobs.API.Data
 
             client.DefaultRequestHeaders.Accept.Clear();
 
-            // var userDetails = new List<TwitterUserDetails>();
+            var userDetails = new TwitterUserDetails();
 
             var oauthClient = new OAuthRequest 
             {
@@ -192,15 +194,17 @@ namespace BirdJobs.API.Data
                 {
                     response.EnsureSuccessStatusCode();
 
-                    var userDetails = JsonConvert.DeserializeObject<TwitterUserDetails>(response.Content.     ReadAsStringAsync().Result);
+                    userDetails = JsonConvert.DeserializeObject<TwitterUserDetails>(response.Content.     ReadAsStringAsync().Result);
 
                 }
             }
             catch (Exception ex)
             {
                 
-                throw;
+                
             }
+
+            return userDetails;
 
         }
 

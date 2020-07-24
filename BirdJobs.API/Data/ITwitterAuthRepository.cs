@@ -11,6 +11,6 @@ namespace BirdJobs.API.Data
         Task<bool> SaveAll();
         Task<RequestTokenResponse> GetRequestToken();
         Task<UserModelDto> GetAccessToken(string token, string oauthVerifier);
-        Task VerifyCredentials(string token, string tokenSecret);
+        Task<TwitterUserDetails> VerifyCredentials(string token, string tokenSecret);
     }
 }

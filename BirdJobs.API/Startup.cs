@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using BirdJobs.API.Data;
 using BirdJobs.API.Helpers;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -17,6 +19,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 
 namespace BirdJobs.API
 {
@@ -47,11 +50,17 @@ namespace BirdJobs.API
             services.AddHttpClient("twitter");
             services.AddScoped<ITwitterAuthRepository, TwitterAuthRepository>();
              
-            //  services.AddAuthentication().AddTwitter(twitterOptions => {
-            //      twitterOptions.ConsumerKey = Configuration.GetSection("AppSettings:Twitter_AppId").Value;
-            //      twitterOptions.ConsumerSecret = Configuration.GetSection("AppSettings:Twitter_AppSecret").Value;
-            //      twitterOptions.RetrieveUserDetails = true;
-            //  });
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                    .AddJwtBearer(options => {
+                        options.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateIssuerSigningKey = true,
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII
+                            .GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
+                            ValidateIssuer = false,
+                            ValidateAudience = false
+                        };
+                    });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -81,6 +90,7 @@ namespace BirdJobs.API
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             app.UseRouting();
+            app.UseAuthentication(); 
 
             app.UseAuthorization();
 
