@@ -1,3 +1,4 @@
+import { TwitterAuthService } from './../services/twitter-auth.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavBarComponent implements OnInit {
 
-  constructor() { }
+  constructor(public auth: TwitterAuthService) { }
 
   ngOnInit() {
+  }
+
+  loggedIn() {
+    return this.auth.loggedIn();
   }
 
 }

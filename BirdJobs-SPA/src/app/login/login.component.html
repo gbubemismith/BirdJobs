@@ -3,14 +3,16 @@
     <form class="form-signin effect1">
         <div class="text-center mb-4">
           <img class="mb-4" src="" alt="" width="72" height="72">
-          <h1 class="h3 mb-3 font-weight-normal">Floating labels</h1>
+          <h1 class="h3 mb-3 font-weight-normal">Bird Jobs</h1>
           <p>Build form controls with floating labels via the <code>:placeholder-shown</code> pseudo-element. <a href="https://caniuse.com/#feat=css-placeholder-shown">Works in latest Chrome, Safari, and Firefox.</a></p>
         </div>
     
         <div class="text-center social-btn">
-            <button class="btn btn-info btn-block" (click)="launchTwitterLogin()" 
-            type="button" [disabled]="disableButton"><i class="fa fa-twitter"></i> Sign in with <b>Twitter</b></button>
-           
+          
+          <button class="btn btn-info btn-block" (click)="launchTwitterLogin()" 
+            type="button" [disabled]="disableButton"> <i *ngIf="isLoading" class="fa fa-spinner fa-spin fa-lg fa-fw" aria-hidden="true"></i> <i class="fa fa-twitter"></i> Sign in with <b>Twitter</b>
+          </button>
+                  
         </div>
         
       </form>

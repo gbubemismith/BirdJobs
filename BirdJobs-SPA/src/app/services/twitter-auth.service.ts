@@ -2,6 +2,7 @@ import { RequestToken } from './../models/requestToken';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -10,6 +11,7 @@ import { map } from 'rxjs/operators';
 })
 export class TwitterAuthService {
   baseUrl = environment.apiUrl;
+  jwtHelper = new JwtHelperService();
   decodedToken: any;
 
   constructor(private http: HttpClient) { }
@@ -38,5 +40,11 @@ export class TwitterAuthService {
         })
       );
 
+  }
+
+  loggedIn() {
+    const token = localStorage.getItem('token');
+
+    return !this.jwtHelper.isTokenExpired(token);
   }
 }

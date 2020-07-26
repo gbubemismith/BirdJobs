@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { ErrorInterceptorProvider } from './services/error.interceptor';
 import { HttpClientModule } from '@angular/common/http';
 import { JwtModule } from '@auth0/angular-jwt';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -29,6 +30,7 @@ export function tokenGetter() {
     BrowserModule,
     RouterModule.forRoot(appRoutes),
     HttpClientModule,
+    NgbModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
