@@ -19,9 +19,20 @@
           <a class="nav-link" href="#">About</a>
         </li>
       </ul>
-      <form class="form-inline my-2 my-lg-0">
-        <input class="form-control mr-sm-2" type="text" placeholder="Search">
-        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-      </form>
+
+      <div ngbDropdown class="dropdown" >
+        <span class="mr-2">
+            <img [src]="photoUrl || '../../assets/user.png'" alt="">
+        </span>
+        <a ngbDropdownToggle class="dropdown-toggle text-light" >
+            Welcome {{ auth.decodedToken?.unique_name | titlecase }}
+        </a>
+        
+        <div ngbDropdownMenu class=" mt-3" >
+            <a ngbDropdownItem class="dropdown-item" [routerLink]="['/member/edit']"><i class="fa fa-user"></i> Edit Profile</a>
+            <div class="dropdown-divider"></div>
+            <a ngbDropdownItem class="dropdown-item" (click)="logout()"><i class="fa fa-sign-out"></i> Logout</a>
+        </div>
+    </div>
     </div>
   </nav>

@@ -40,6 +40,7 @@ export class LoginComponent implements OnInit {
   }
 
   launchTwitterLogin() {
+    
     this.isLoading = true;
     this.disableButton = true;
     this.twitterService.getRequestToken()
