@@ -6,7 +6,7 @@ import { IsSignedInGuardGuard } from './guards/is-signed-in-guard.guard';
 
 export const appRoutes: Routes = [
     { path: '', component: HomeComponent, canActivate: [AuthGuardGuard]},
-    { path: 'login', component: LoginComponent},
+    { path: 'login', component: LoginComponent,},
     { path: 'home', component: HomeComponent, canActivate: [AuthGuardGuard]},
     { path: '**', redirectTo: '', pathMatch: 'full'}
 ]

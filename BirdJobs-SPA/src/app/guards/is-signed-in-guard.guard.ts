@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router} from '@angular/router';
+import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
 import { Observable } from 'rxjs';
 import { TwitterAuthService } from '../services/twitter-auth.service';
 
@@ -10,13 +10,14 @@ export class IsSignedInGuardGuard implements CanActivate {
 
   constructor(private auth: TwitterAuthService, private router: Router) { }
 
-  canActivate(): boolean{
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean{
+
     if (this.auth.loggedIn) {
       this.router.navigate(['/home']);
-      return false;
+      return true;
     }
 
-    return true;
+    return false;
   }
   
 }

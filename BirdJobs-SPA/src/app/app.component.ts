@@ -1,3 +1,4 @@
+import { UserDetails } from './models/userDetails';
 import { TwitterAuthService } from './services/twitter-auth.service';
 import { Component } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
@@ -12,10 +13,16 @@ export class AppComponent {
 
   constructor (private auth: TwitterAuthService) {
     const token = localStorage.getItem('token');
+    const user: UserDetails = JSON.parse(localStorage.getItem('user'));
 
     if (token) {
       auth.decodedToken = this.jwtHelper.decodeToken(token);
     }
+
+    if (user) {
+      auth.currentUser = user;
+    }
+    
   }
   
 }

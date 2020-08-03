@@ -4,6 +4,22 @@
 
 img {
     max-height: 50px;
-    border: 2px solid white;
     display: inline;
+    border: 2px solid white;
+    border-radius: 100%;
+    background-size: cover;
+}
+
+.dropdown-toggle{
+   color: white;
+   
+}
+  
+.dropdown-item {
+    color: white;  
+}
+
+.navbar-brand {
+    font-family: "Gill Sans", sans-serif;
+    font-size: 30px;;
 }

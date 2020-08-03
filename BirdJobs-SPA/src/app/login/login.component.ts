@@ -10,7 +10,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
-  private authWindow: Window;
   private requestToken: Partial<RequestToken> = {};
   disableButton = false;
   isLoading = false;
