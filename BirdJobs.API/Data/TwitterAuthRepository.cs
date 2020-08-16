@@ -40,8 +40,7 @@ namespace BirdJobs.API.Data
             var client = _clientFactory.CreateClient("twitter");
             var consumerKey = _twitterConfig.Value.AppId;
             var consumerSecret = _twitterConfig.Value.AppSecret;
-            // var callbackUrl = "http://localhost:5000/api/twitterclient/sign-in-with-twitter";
-            var callbackUrl = "http://localhost:4200";
+            var callbackUrl = "http://localhost:4200/login";
 
             client.DefaultRequestHeaders.Accept.Clear();
 
@@ -83,7 +82,6 @@ namespace BirdJobs.API.Data
                         oauth_callback_confirmed = responseString[2]
                     };
 
-                    // var check = JsonConvert.DeserializeObject<Object>(response.Content.ReadAsStringAsync().Result);
 
                 }
             }
