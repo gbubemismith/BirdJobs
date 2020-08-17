@@ -21,13 +21,15 @@ namespace BirdJobs.API.Controllers
         private readonly IMapper _mapper;
         private readonly IConfiguration _config;
         private readonly DataContext _context;
+        private readonly ITwitterFunctionsRepository _twitterFunctions;
         public TwitterClientController(ITwitterAuthRepository twitterAuth, IMapper mapper, 
-        IConfiguration config, DataContext context)
+        IConfiguration config, DataContext context, ITwitterFunctionsRepository twitterFunctions)
         {
             _context = context;
             _config = config;
             _mapper = mapper;
             _twitterAuth = twitterAuth;
+            _twitterFunctions = twitterFunctions;
 
         }
 
@@ -101,6 +103,15 @@ namespace BirdJobs.API.Controllers
         return BadRequest("Error getting access token and user details");
 
 
+    }
+
+
+    [HttpGet("SearchTweets")]
+    public async Task<IActionResult> SearchTweets()
+    {
+        var check = await _twitterFunctions.SearchTweets();
+
+        return Ok();
     }
 
 

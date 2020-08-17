@@ -49,6 +49,7 @@ namespace BirdJobs.API
             services.Configure<TwitterSettings>(Configuration.GetSection("TwitterSettings"));
             services.AddHttpClient("twitter");
             services.AddScoped<ITwitterAuthRepository, TwitterAuthRepository>();
+            services.AddScoped<ITwitterFunctionsRepository, TwitterFunctionsRepository>();
              
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(options => {
