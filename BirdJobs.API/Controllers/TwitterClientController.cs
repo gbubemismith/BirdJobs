@@ -1,5 +1,6 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -106,12 +107,20 @@ namespace BirdJobs.API.Controllers
     }
 
 
-    [HttpGet("SearchTweets")]
-    public async Task<IActionResult> SearchTweets()
+    [HttpPost("SearchTweets")]
+    public async Task<IActionResult> SearchTweets(SearchTweetRequestModel requestModel)
     {
-        var check = await _twitterFunctions.SearchTweets();
 
-        return Ok();
+        requestModel.query = "(#hiring (#developer OR software engineer OR software developer OR #tech)) has:links lang:en";
+
+        var response = await _twitterFunctions.SearchTweets(requestModel);
+
+        if (response.results.Any())
+        {
+            return Ok(response);
+        }
+
+        return NotFound();
     }
 
 

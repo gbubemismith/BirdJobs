@@ -5,6 +5,6 @@ namespace BirdJobs.API.Data
 {
     public interface ITwitterFunctionsRepository
     {
-        Task<SearchTweetResponseModel> SearchTweets();
+        Task<SearchTweetResponseModel> SearchTweets(SearchTweetRequestModel requestModel);
     }
 }

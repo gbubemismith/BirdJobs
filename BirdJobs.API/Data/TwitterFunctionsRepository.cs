@@ -24,7 +24,7 @@ namespace BirdJobs.API.Data
             _config = config;
 
         }
-        public async Task<SearchTweetResponseModel> SearchTweets()
+        public async Task<SearchTweetResponseModel> SearchTweets(SearchTweetRequestModel requestModel)
         {
             var client = _clientFactory.CreateClient("twitter");
             var consumerKey = _twitterConfig.Value.AppId;
@@ -34,17 +34,7 @@ namespace BirdJobs.API.Data
 
             client.DefaultRequestHeaders.Accept.Clear();
 
-            // var req = new  
-            // {
-            //     query = "(#hiring (#developer OR software engineer OR software developer OR #tech)) has:links lang:en"
-            // };
-
-            var req = new SearchTweetRequestModel
-            {
-                query = "(#hiring (#developer OR software engineer OR software developer OR #tech)) has:links lang:en"
-            };
-
-            var json = JsonSerializer.Serialize(req, new JsonSerializerOptions { IgnoreNullValues = true });
+            var json = JsonSerializer.Serialize(requestModel, new JsonSerializerOptions { IgnoreNullValues = true });
 
             var reqContent = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -68,23 +58,20 @@ namespace BirdJobs.API.Data
             {
                 using var httpResponse = await client.PostAsync(oauthClient.RequestUrl, reqContent);
 
-                //httpResponse.EnsureSuccessStatusCode();
+                httpResponse.EnsureSuccessStatusCode();
 
-                if (httpResponse.IsSuccessStatusCode)
-                {
-                    var contentStream = await httpResponse.Content.ReadAsStreamAsync();
+                var contentStream = await httpResponse.Content.ReadAsStreamAsync();
 
-                    tweetsResponse = await JsonSerializer.DeserializeAsync<SearchTweetResponseModel>(contentStream);
-                }
+                tweetsResponse = await JsonSerializer.DeserializeAsync<SearchTweetResponseModel>(contentStream);
 
-                var check = await httpResponse.Content.ReadAsStringAsync();
+                //var check = await httpResponse.Content.ReadAsStringAsync();
 
                 
             }
             catch (Exception ex)
             {
                 
-                throw;
+                
             }
 
             return tweetsResponse;
