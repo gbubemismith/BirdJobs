@@ -1,1 +1,41 @@
-<p>home works!</p>
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-md-9">
+
+            <!-- <ngx-skeleton-loader count="3" appearance="circle" animation="pulse" *ngIf="skeletonloader"></ngx-skeleton-loader> -->
+
+            <ng-container *ngFor="let job of jobs$ | async as jobs; index as i">
+                
+                <div class="row" *ngIf="i%3 === 0">
+                
+                    <div class="col">
+                        <app-jobs-card [job]="jobs[i]"></app-jobs-card>
+                    </div>
+    
+                    <div class="col">
+                        <app-jobs-card [job]="jobs[i+1]"></app-jobs-card>
+                    </div>
+    
+                    <div class="col">
+                        <app-jobs-card [job]="jobs[i+2]"></app-jobs-card>
+                    </div>
+    
+                    
+                </div>
+
+            </ng-container>
+
+        </div>
+
+        <div class="col-md-3">
+            <h4>Reserved</h4>
+        </div>
+
+        
+
+
+
+    </div>
+</div>
+
+

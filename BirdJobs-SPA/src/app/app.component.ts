@@ -21,6 +21,7 @@ export class AppComponent {
 
     if (user) {
       auth.currentUser = user;
+      auth.twitterProfilePicture(user.profile_image_url_https);
     }
     
   }

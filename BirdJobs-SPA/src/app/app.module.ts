@@ -6,12 +6,16 @@ import { ErrorInterceptorProvider } from './services/error.interceptor';
 import { HttpClientModule } from '@angular/common/http';
 import { JwtModule } from '@auth0/angular-jwt';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgxSkeletonLoaderModule  } from 'ngx-skeleton-loader';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { HomeComponent } from './home/home.component';
 import { TwitterAuthService } from './services/twitter-auth.service';
+import { TwitterFunctionsService } from './services/twitter-functions.service';
+import { JobsCardComponent } from './jobs-card/jobs-card.component';
+import { LoadingComponent } from './loading/loading.component';
 
 
 
@@ -24,13 +28,16 @@ export function tokenGetter() {
     AppComponent,
     LoginComponent,
     NavBarComponent,
-    HomeComponent
+    HomeComponent,
+    JobsCardComponent,
+    LoadingComponent
   ],
   imports: [
     BrowserModule,
     RouterModule.forRoot(appRoutes),
     HttpClientModule,
     NgbModule,
+    NgxSkeletonLoaderModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
@@ -42,7 +49,8 @@ export function tokenGetter() {
   ],
   providers: [
     ErrorInterceptorProvider,
-    TwitterAuthService
+    TwitterAuthService,
+    TwitterFunctionsService
   ],
   bootstrap: [AppComponent]
 })

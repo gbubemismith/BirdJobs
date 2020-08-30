@@ -1,0 +1,54 @@
+/*Profile card 2*/
+div.card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.profile {
+    float: left;
+}
+
+.profile img {
+    max-height: 50px;
+    display: inline;
+    border: 3px solid rgba(255, 255, 255, 1);
+    border-radius: 100%;
+    background-size: cover;
+}
+
+.userDetails {
+    float: left;
+}
+
+
+.profile-card-2 h5{
+    font-weight:500;
+    font-size: large;
+    color:#A9CCE3;
+}
+.profile-card-2 .card-text{
+    font-weight:300;
+    font-size:15px;
+}
+.profile-card-2 .icon-block{
+    float:left;
+    width:100%;
+}
+.profile-card-2 .icon-block a{
+    text-decoration:none;
+}
+.profile-card-2 i {
+  display: inline-block;
+    font-size: 16px;
+    color: #6ab04c;
+    text-align: center;
+    border: 1px solid #6ab04c;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    border-radius: 50%;
+    margin:0 5px;
+}
+.profile-card-2 i:hover {
+  background-color:#6ab04c;
+  color:#fff;
+}

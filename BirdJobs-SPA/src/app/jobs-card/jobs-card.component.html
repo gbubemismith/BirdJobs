@@ -1,0 +1,15 @@
+<div class="card border-light profile-card-2 mb-3" style="max-width: 20rem;">
+    <div class="card-header">
+        <div class="profile mr-4">
+            <img [src]="job.user.profile_image_url_https" alt="profile-image" />
+        </div>
+        <div class="userDetails">
+            <h5>@{{job.user.screen_name}}</h5>
+            <h6>4 days ago</h6>
+        </div>
+    </div>
+    <div class="card-body">
+      <p class="card-text">{{ job.text }}</p>
+    </div>
+</div>
+
