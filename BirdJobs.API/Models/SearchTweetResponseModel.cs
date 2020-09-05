@@ -17,6 +17,7 @@ namespace BirdJobs.API.Models
         public string source { get; set; }
         public bool truncated { get; set; }
         public UserDetails user { get; set; }
+        public ExtendedTweets extended_tweet { get; set; }
         public Entities entities { get; set; }
     }
 
@@ -36,6 +37,11 @@ namespace BirdJobs.API.Models
         public string description { get; set; }
         public string profile_background_color { get; set; }
         public string profile_image_url_https { get; set; }
+    }
+
+    public class ExtendedTweets
+    {
+        public string full_text { get; set; }
     }
 
     public class Entities
