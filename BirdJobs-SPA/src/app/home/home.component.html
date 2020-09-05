@@ -8,15 +8,15 @@
                 
                 <div class="row" *ngIf="i%3 === 0">
                 
-                    <div class="col">
+                    <div class="col pb-3">
                         <app-jobs-card [job]="jobs[i]"></app-jobs-card>
                     </div>
     
-                    <div class="col">
+                    <div class="col pb-3">
                         <app-jobs-card [job]="jobs[i+1]"></app-jobs-card>
                     </div>
     
-                    <div class="col">
+                    <div class="col pb-3">
                         <app-jobs-card [job]="jobs[i+2]"></app-jobs-card>
                     </div>
     
@@ -37,5 +37,6 @@
 
     </div>
 </div>
+
 
 

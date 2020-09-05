@@ -19,6 +19,9 @@ div.card {
     float: left;
 }
 
+.profile-card-2 {
+    cursor: pointer;
+}
 
 .profile-card-2 h5{
     font-weight:500;
@@ -48,7 +51,18 @@ div.card {
     border-radius: 50%;
     margin:0 5px;
 }
-.profile-card-2 i:hover {
-  background-color:#6ab04c;
-  color:#fff;
+
+.modal-header {
+    background-color: #03a9f4e3;
+    padding: 1rem;
 }
+
+.modal-body .modal-footer {
+    background-color: #152028;
+}
+
+.close {
+    outline: none !important;
+    /* box-shadow: none; */
+}
+

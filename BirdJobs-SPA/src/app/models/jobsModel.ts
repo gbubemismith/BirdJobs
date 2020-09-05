@@ -12,7 +12,12 @@ export interface Results {
     text: string;
     source: string;
     user: UserDetails;
+    extended_tweet: ExtendedTweet;
     entities: Entities;
+}
+
+export interface ExtendedTweet {
+    full_text: string;
 }
 
 export interface Entities { 

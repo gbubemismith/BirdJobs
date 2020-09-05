@@ -1,15 +1,42 @@
-<div class="card border-light profile-card-2 mb-3" style="max-width: 20rem;">
+<div class="card border-light profile-card-2 h-100 mb-2" style="max-width: 20rem;" (click)="open(content)">
     <div class="card-header">
         <div class="profile mr-4">
             <img [src]="job.user.profile_image_url_https" alt="profile-image" />
         </div>
         <div class="userDetails">
-            <h5>@{{job.user.screen_name}}</h5>
-            <h6>4 days ago</h6>
+            <h5 class="text-primary">@{{job.user.screen_name}}</h5>
+            <h6 class="text-muted">{{ job.created_at | timeAgo}}</h6>
         </div>
     </div>
     <div class="card-body">
       <p class="card-text">{{ job.text }}</p>
     </div>
-</div>
+</div> 
 
+
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <div class="profile mr-4">
+            <img [src]="job.user.profile_image_url_https" alt="profile-image" />
+        </div>
+        <div class="">
+            <h5 class="modal-title" id="modal-basic-title">@{{job.user.screen_name}}</h5>
+            <h6 class=""> <i class="fa fa-clock-o" aria-hidden="true"></i> {{ job.created_at | date}}</h6>
+        </div>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <blockquote class="blockquote">
+            <p class="mb-0">{{ job.extended_tweet?.full_text == null ? job.text : job.extended_tweet.full_text }}</p>
+            <!-- <footer class="blockquote-footer">Someone famous in <cite title="Source Title">Source Title</cite></footer> -->
+          </blockquote>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary" (click)="modal.close('Save click')"><i class="fa fa-paper-plane" aria-hidden="true"></i> Apply</button>
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')"><i class="fa fa-twitter" aria-hidden="true"></i> View Tweet</button>
+
+    </div>
+</ng-template>

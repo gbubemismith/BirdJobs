@@ -7,6 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { JwtModule } from '@auth0/angular-jwt';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSkeletonLoaderModule  } from 'ngx-skeleton-loader';
+import {  TimeAgoPipe } from 'time-ago-pipe';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -30,7 +31,8 @@ export function tokenGetter() {
     NavBarComponent,
     HomeComponent,
     JobsCardComponent,
-    LoadingComponent
+    LoadingComponent,
+    TimeAgoPipe
   ],
   imports: [
     BrowserModule,
