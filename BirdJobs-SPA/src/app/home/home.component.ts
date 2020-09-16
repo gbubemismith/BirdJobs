@@ -1,8 +1,8 @@
+import { Results } from './../models/jobsModel';
 import { LoadingService } from './../services/loading-service.service';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { TwitterFunctionsService } from './../services/twitter-functions.service';
 import { Component, OnInit } from '@angular/core';
-import { Results } from '../models/jobsModel';
 import { map, finalize } from 'rxjs/operators';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
@@ -13,11 +13,11 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 })
 export class HomeComponent implements OnInit {
   next: string = '';
-  jobs: Results[];
   skeletonloader = true;
   closeResult = '';
 
-  jobs$: Observable<Results[]>;
+  jobsArray: BehaviorSubject<Results[]> = new BehaviorSubject<Results[]>([]);
+  jobs$: Observable<Results[]> = this.jobsArray.asObservable();
 
 
   constructor(private twitterFunctions: TwitterFunctionsService, private loadingService: LoadingService) { }
@@ -49,23 +49,57 @@ export class HomeComponent implements OnInit {
     //  );
 
     const jobsResults$ = this.twitterFunctions.loadAllJobs();
-    //  .pipe(
-    //    map(response => response
-    //    )
-    //  );
 
      const loadJobs$ = this.loadingService.showLoadingUntilCompleted(jobsResults$);
 
-     this.jobs$ = loadJobs$
-                          .pipe(
-                            map(
-                              response => {
-                                this.next = response.next;
-                                return response.results;
-                              }
-                            )
-                          );
+    //  this.jobs$ = loadJobs$
+    //                       .pipe(
+    //                         map(
+    //                           response => {
+    //                             this.next = response.next;
+    //                             return response.results;
+    //                           }
+    //                         )
+    //                       );
 
+    loadJobs$.subscribe(response => {
+      console.log(response);
+      this.next = response.next;
+      this.jobsArray.next(response.results);
+    });
+
+
+      
+
+  }
+
+  displayMoreJobs() {
+    console.log('clicked');
+
+    this.twitterFunctions.loadAllJobs(this.next)
+                                            .pipe(
+                                              map(
+                                                response => {
+                                                  this.next = response.next;
+                                                  return response.results;
+                                                }
+                                              )
+                                            )
+                                            .subscribe(response => {
+                                              const currentValue = this.jobsArray.value;
+                                              currentValue.push(...response);
+                                              console.log('check', currentValue);
+                                            });
+
+    
+    // const currentValue = this.jobsArray.value;
+    // // currentValue.push(this.nextJobs);
+
+    // console.log('Current', this.nextJobs);
+    
+    // this.jobsArray.next(currentValue);
+
+    
   }
 
   

@@ -15,7 +15,7 @@ export class TwitterFunctionsService {
   
   constructor(private http: HttpClient) { }
 
-  loadAllJobs(): Observable<JobsModel> {
-    return this.http.post<JobsModel>(this.baseUrl + 'twitterclient/SearchTweets', {});
+  loadAllJobs(next?): Observable<JobsModel> {
+    return this.http.post<JobsModel>(this.baseUrl + 'twitterclient/SearchTweets', {next : next});
   }
 }
